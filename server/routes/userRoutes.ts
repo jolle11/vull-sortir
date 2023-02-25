@@ -1,9 +1,15 @@
-import { createUser, getUserById } from "../controllers/userController";
-import { Router } from "express";
+import {
+	getUserProfile,
+	loginUser,
+	registerUser,
+} from "../controllers/userController";
+import verifyToken from "../middleware/verifyToken";
+import express from "express";
 
-const router = Router();
+const router = express.Router();
 
-router.post("/", createUser);
-router.get("/:id", getUserById);
+router.post("/register", registerUser);
+router.post("/login", loginUser);
+router.get("/profile", verifyToken, getUserProfile);
 
 export default router;
