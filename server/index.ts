@@ -1,11 +1,12 @@
 import connectDB from "./config/db";
-import userRoutes from "./routes/userRoutes";
+import errorHandler from "./middleware/errorMiddleware";
+import keeperRoutes from "./routes/keeperRoutes";
+import walkerRoutes from "./routes/walkerRoutes";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 
-// Establecer conexión a la base de datos
 connectDB();
 
 dotenv.config();
@@ -16,18 +17,23 @@ const PORT = process.env.PORT || 5002;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Middleware de CORS
+// CORS middleware
 app.use(cors());
 
-// Middleware de body parser
+// Body parser middleware
 app.use(express.json());
 
-// Rutas de usuarios
-app.use("/api/users", userRoutes);
+// Keeper routes
+app.use("/api/users/keeper", keeperRoutes);
+// Walker routes
+app.use("/api/users/walker", walkerRoutes);
 
-// Ruta principal
+// Main route
 app.get("/", (_req: Request, res: Response) => {
-	res.send("Bienvenido a Vull Sortir API");
+	res.send("Welcome to Vull Sortir API");
 });
+
+// Error handling middleware
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`🏃💨 ${PORT}`));
